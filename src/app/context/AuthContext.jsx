@@ -107,7 +107,7 @@ export function AuthProvider({ children }) {
       localStorage.removeItem('auth-token')
       return { success: false, message: error.message }
     }
-  }, [])
+  }, [router])
 
   const signUp = useCallback(async (email, password, username) => {
     try {
@@ -135,7 +135,7 @@ export function AuthProvider({ children }) {
       console.error('Sign up error:', error)
       return { success: false, message: error.message }
     }
-  }, [])
+  }, [router])
 
   const signOut = useCallback(async () => {
     console.log('Logging out user...')
@@ -160,7 +160,7 @@ export function AuthProvider({ children }) {
     // Force immediate redirect to login page
     console.log('Redirecting to login page')
     router.replace('/') // Use Next.js router to prevent refresh loops
-  }, [])
+  }, [router])
 
   const updateUser = useCallback((newUserData) => {
     setUser(newUserData)

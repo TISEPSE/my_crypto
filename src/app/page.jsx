@@ -61,7 +61,15 @@ export default function Home() {
 
       if (result.success) {
         setSuccess(result.message)
-        // La redirection est gérée dans signIn/signUp
+        // Si c'est une inscription réussie, basculer vers le formulaire de connexion
+        if (isSignUp) {
+          setTimeout(() => {
+            setIsSignUp(false)
+            setFormData({ email: formData.email, password: '', username: '' })
+            setSuccess('Compte créé ! Vous pouvez maintenant vous connecter.')
+          }, 1500)
+        }
+        // La redirection pour signIn est gérée dans signIn
       } else {
         setError(result.message || 'Erreur inconnue')
       }

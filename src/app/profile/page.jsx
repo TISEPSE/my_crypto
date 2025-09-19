@@ -283,26 +283,27 @@ export default function Profile() {
               )}
             </div>
 
-            {/* Edit Profile Button */}
-            {!isEditing && (
-              <div className="mt-6 pt-4 border-t border-gray-700/50">
-                <button
-                  onClick={() => setIsEditing(true)}
-                  disabled={loading}
-                  className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-gray-600 hover:bg-gray-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-xl transition-all duration-200 hover:opacity-90 disabled:opacity-50 text-sm font-semibold shadow-lg hover:shadow-xl active:scale-98"
-                >
-                  <FaEdit className="text-base" />
-                  <span>{t('profile.editProfile')}</span>
-                </button>
-              </div>
-            )}
           </div>
         </div>
 
         {/* Right Column - Profile Details */}
         <div className="lg:col-span-2">
           <div className="bg-[#1a1d29] border border-gray-700/50 rounded-lg p-6">
-            <h3 className="text-lg font-semibold text-white mb-6">{t('profile.accountInfo')}</h3>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+              <h3 className="text-lg font-semibold text-white">{t('profile.accountInfo')}</h3>
+
+              {/* Edit Profile Button - Moved here */}
+              {!isEditing && (
+                <button
+                  onClick={() => setIsEditing(true)}
+                  disabled={loading}
+                  className="flex items-center justify-center gap-2 px-4 py-2 bg-gray-600 hover:bg-gray-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-lg transition-all duration-200 hover:opacity-90 disabled:opacity-50 text-sm font-medium shadow-lg hover:shadow-xl active:scale-98 w-full sm:w-auto"
+                >
+                  <FaEdit className="text-sm" />
+                  <span>{t('profile.editProfile')}</span>
+                </button>
+              )}
+            </div>
 
             <div className="space-y-6">
               {/* Personal Information Section */}
