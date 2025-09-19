@@ -1,7 +1,4 @@
 {
-  "env": {
-    "NEXT_PUBLIC_VERCEL_ENV": "@vercel-env"
-  },
   "functions": {
     "src/app/api/**/*.js": {
       "maxDuration": 10
