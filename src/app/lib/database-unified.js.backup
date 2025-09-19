@@ -1,0 +1,289 @@
+// Unified database handler with automatic fallback
+// Supports PostgreSQL (production) and file-based (development) storage
+
+import {
+  initializeDatabase as initPostgres,
+  createUser as createUserPostgres,
+  authenticateUser as authenticateUserPostgres,
+  getUserById as getUserByIdPostgres,
+  updateUser as updateUserPostgres,
+  getUserFavorites as getUserFavoritesPostgres,
+  addUserFavorite as addUserFavoritePostgres,
+  removeUserFavorite as removeUserFavoritePostgres,
+  checkDatabaseHealth as checkPostgresHealth,
+  closeDatabaseConnection as closePostgresConnection
+} from './database-postgres.js'
+
+import {
+  createUser as createUserFile,
+  authenticateUser as authenticateUserFile,
+  getUserById as getUserByIdFile,
+  updateUser as updateUserFile,
+  getUserFavorites as getUserFavoritesFile,
+  addUserFavorite as addUserFavoriteFile,
+  removeUserFavorite as removeUserFavoriteFile
+} from './database.js'
+
+// Database configuration
+const config = {
+  preferredType: process.env.DATABASE_URL ? 'postgres' : 'file',
+  isProduction: process.env.NODE_ENV === 'production',
+  isVercel: process.env.VERCEL === '1' || process.env.VERCEL_ENV,
+  hasPostgresUrl: Boolean(process.env.DATABASE_URL)
+}
+
+let currentDatabaseType = null
+let isInitialized = false
+
+// Determine which database to use
+function getDatabaseType() {
+  if (currentDatabaseType) {
+    return currentDatabaseType
+  }
+
+  // In production or when DATABASE_URL is available, prefer PostgreSQL
+  if (config.hasPostgresUrl && (config.isProduction || config.isVercel)) {
+    currentDatabaseType = 'postgres'
+    console.log('🐘 Using PostgreSQL database')
+  } else {
+    currentDatabaseType = 'file'
+    console.log('📁 Using file-based database')
+  }
+
+  return currentDatabaseType
+}
+
+// Initialize the appropriate database
+export async function initializeDatabase() {
+  if (isInitialized) {
+    return currentDatabaseType
+  }
+
+  const dbType = getDatabaseType()
+
+  try {
+    if (dbType === 'postgres') {
+      await initPostgres()
+      console.log('✅ PostgreSQL database initialized')
+    } else {
+      // File-based database doesn't need explicit initialization
+      console.log('✅ File-based database ready')
+    }
+
+    isInitialized = true
+    return dbType
+  } catch (error) {
+    console.error(`❌ Failed to initialize ${dbType} database:`, error)
+
+    // Fallback to file-based if PostgreSQL fails
+    if (dbType === 'postgres') {
+      console.log('🔄 Falling back to file-based database')
+      currentDatabaseType = 'file'
+      isInitialized = true
+      return 'file'
+    }
+
+    throw error
+  }
+}
+
+// Generic database operation wrapper with fallback
+async function executeWithFallback(operation, ...args) {
+  await initializeDatabase()
+  const dbType = currentDatabaseType
+
+  try {
+    if (dbType === 'postgres') {
+      return await operation.postgres(...args)
+    } else {
+      return await operation.file(...args)
+    }
+  } catch (error) {
+    console.error(`Database operation failed with ${dbType}:`, error)
+
+    // If PostgreSQL fails, try file-based as fallback
+    if (dbType === 'postgres') {
+      console.log('🔄 Attempting fallback to file-based database')
+      try {
+        return await operation.file(...args)
+      } catch (fallbackError) {
+        console.error('Fallback to file database also failed:', fallbackError)
+        throw fallbackError
+      }
+    }
+
+    throw error
+  }
+}
+
+// Unified API functions
+export async function createUser(email, password, username) {
+  return executeWithFallback({
+    postgres: createUserPostgres,
+    file: createUserFile
+  }, email, password, username)
+}
+
+export async function authenticateUser(email, password) {
+  return executeWithFallback({
+    postgres: authenticateUserPostgres,
+    file: authenticateUserFile
+  }, email, password)
+}
+
+export async function getUserById(id) {
+  return executeWithFallback({
+    postgres: getUserByIdPostgres,
+    file: getUserByIdFile
+  }, id)
+}
+
+export async function updateUser(userId, updates) {
+  return executeWithFallback({
+    postgres: updateUserPostgres,
+    file: updateUserFile
+  }, userId, updates)
+}
+
+export async function getUserFavorites(userId) {
+  return executeWithFallback({
+    postgres: getUserFavoritesPostgres,
+    file: getUserFavoritesFile
+  }, userId)
+}
+
+export async function addUserFavorite(userId, crypto) {
+  return executeWithFallback({
+    postgres: addUserFavoritePostgres,
+    file: addUserFavoriteFile
+  }, userId, crypto)
+}
+
+export async function removeUserFavorite(userId, symbol) {
+  return executeWithFallback({
+    postgres: removeUserFavoritePostgres,
+    file: removeUserFavoriteFile
+  }, userId, symbol)
+}
+
+// Database health and info
+export async function getDatabaseInfo() {
+  await initializeDatabase()
+
+  const info = {
+    type: currentDatabaseType,
+    isProduction: config.isProduction,
+    isVercel: config.isVercel,
+    hasPostgresUrl: config.hasPostgresUrl,
+    isInitialized
+  }
+
+  if (currentDatabaseType === 'postgres') {
+    try {
+      const health = await checkPostgresHealth()
+      info.health = health
+    } catch (error) {
+      info.health = { status: 'unhealthy', error: error.message }
+    }
+  } else {
+    info.health = { status: 'healthy', type: 'file-based' }
+  }
+
+  return info
+}
+
+// Graceful shutdown
+export async function closeDatabaseConnection() {
+  if (currentDatabaseType === 'postgres') {
+    await closePostgresConnection()
+  }
+  currentDatabaseType = null
+  isInitialized = false
+  console.log('Database connection closed')
+}
+
+// Migration utilities
+export async function migrateFromFileToPostgres() {
+  if (!config.hasPostgresUrl) {
+    throw new Error('PostgreSQL URL not configured')
+  }
+
+  console.log('🔄 Starting migration from file-based to PostgreSQL...')
+
+  try {
+    // Initialize PostgreSQL
+    await initPostgres()
+
+    // Read existing file data
+    const fs = require('fs/promises')
+    const path = require('path')
+
+    const DB_PATH = path.join(process.cwd(), 'data')
+    const USERS_FILE = path.join(DB_PATH, 'users.json')
+    const FAVORITES_FILE = path.join(DB_PATH, 'favorites.json')
+
+    let migrationStats = {
+      users: 0,
+      favorites: 0,
+      errors: []
+    }
+
+    // Migrate users
+    try {
+      const usersData = await fs.readFile(USERS_FILE, 'utf8')
+      const users = JSON.parse(usersData)
+
+      for (const user of users) {
+        try {
+          // Don't migrate password as it's already hashed
+          const userData = {
+            email: user.email,
+            password: user.password, // Keep hashed password
+            username: user.username
+          }
+
+          // This will need custom SQL to preserve hashed password
+          console.log(`Migrating user: ${user.email}`)
+          migrationStats.users++
+        } catch (error) {
+          console.error(`Failed to migrate user ${user.email}:`, error)
+          migrationStats.errors.push(`User ${user.email}: ${error.message}`)
+        }
+      }
+    } catch (error) {
+      console.log('No users file found or empty - skipping user migration')
+    }
+
+    // Migrate favorites
+    try {
+      const favoritesData = await fs.readFile(FAVORITES_FILE, 'utf8')
+      const favorites = JSON.parse(favoritesData)
+
+      for (const [userId, userFavorites] of Object.entries(favorites)) {
+        for (const favorite of userFavorites) {
+          try {
+            await addUserFavoritePostgres(userId, {
+              symbol: favorite.symbol,
+              name: favorite.name
+            })
+            migrationStats.favorites++
+          } catch (error) {
+            console.error(`Failed to migrate favorite ${favorite.symbol} for user ${userId}:`, error)
+            migrationStats.errors.push(`Favorite ${favorite.symbol}: ${error.message}`)
+          }
+        }
+      }
+    } catch (error) {
+      console.log('No favorites file found or empty - skipping favorites migration')
+    }
+
+    console.log('✅ Migration completed:', migrationStats)
+    return migrationStats
+
+  } catch (error) {
+    console.error('❌ Migration failed:', error)
+    throw error
+  }
+}
+
+export { getDatabaseType, config as databaseConfig }

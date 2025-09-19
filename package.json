@@ -1,0 +1,93 @@
+{
+  "name": "my-crypto",
+  "version": "1.0.0",
+  "private": true,
+  "main": "public/electron.js",
+  "homepage": "./",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "electron:dev": "concurrently \"npm run dev\" \"wait-on http://localhost:3000 && electron .\"",
+    "electron:build": "cross-env NODE_ENV=production ELECTRON_BUILD=true next build",
+    "electron:pack": "npm run electron:build && electron-builder",
+    "electron:dist": "npm run electron:build && electron-builder --publish=never",
+    "release": "npm run electron:build && electron-builder --publish=always",
+    "release:draft": "npm run electron:build && electron-builder --publish=onTagOrDraft",
+    "postinstall": "npx @electron/rebuild",
+    "rebuild": "npx @electron/rebuild"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^1.0.1",
+    "@vercel/analytics": "^1.5.0",
+    "autoprefixer": "^10.4.21",
+    "axios": "^1.10.0",
+    "bcryptjs": "^3.0.2",
+    "chart.js": "^4.5.0",
+    "cookie": "^1.0.2",
+    "critters": "^0.0.25",
+    "framer-motion": "^12.23.6",
+    "jose": "^6.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "next": "15.3.5",
+    "postcss": "^8.5.6",
+    "react": "^19.0.0",
+    "react-chartjs-2": "^5.3.0",
+    "react-dom": "^19.0.0",
+    "react-icons": "^5.5.0",
+    "recharts": "^3.1.0",
+    "tailwindcss": "^3.4.17",
+    "zod": "^4.1.8"
+  },
+  "devDependencies": {
+    "@electron/rebuild": "^3.6.0",
+    "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3",
+    "daisyui": "^5.0.50",
+    "electron": "^28.3.3",
+    "electron-builder": "^24.9.1",
+    "electron-updater": "^6.1.7",
+    "eslint": "^9",
+    "eslint-config-next": "15.3.5",
+    "wait-on": "^7.2.0"
+  },
+  "build": {
+    "appId": "com.mycrypto.app",
+    "productName": "My Crypto",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "out/**/*",
+      "public/electron.js",
+      "public/preload.js",
+      "public/database/**/*",
+      "config/**/*",
+      "node_modules/**/*"
+    ],
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "YOUR_GITHUB_USERNAME",
+        "repo": "My-Crypto"
+      }
+    ],
+    "mac": {
+      "category": "public.app-category.productivity",
+      "target": "dmg"
+    },
+    "win": {
+      "target": "nsis",
+      "publisherName": "My Crypto App"
+    },
+    "linux": {
+      "target": "AppImage",
+      "category": "Office"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  }
+}

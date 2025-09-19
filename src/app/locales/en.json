@@ -1,0 +1,242 @@
+{
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "delete": "Delete",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "confirm": "Confirm",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "close": "Close",
+    "add": "Add",
+    "remove": "Remove",
+    "unavailable": "Unavailable",
+    "user": "User",
+    "connected": "Connected",
+    "clear": "Clear",
+    "retry": "Retry",
+    "degradedMode": "Degraded mode"
+  },
+  "auth": {
+    "login": "Login",
+    "register": "Register",
+    "logout": "Sign Out",
+    "email": "Email Address",
+    "password": "Password",
+    "username": "Username",
+    "confirmPassword": "Confirm Password",
+    "forgotPassword": "Forgot Password?",
+    "dontHaveAccount": "Don't have an account?",
+    "alreadyHaveAccount": "Already have an account?",
+    "signInSuccess": "Sign in successful",
+    "signUpSuccess": "Account created successfully. You can now sign in.",
+    "signOutSuccess": "Signed out successfully",
+    "loginRequired": "Login required",
+    "createAccount": "Create account",
+    "signIn": "Sign in",
+    "emailPlaceholder": "Email address",
+    "passwordPlaceholder": "Password",
+    "usernamePlaceholder": "Username (optional - auto-generated if empty)",
+    "usernameOptional": "Username (optional - auto-generated if empty)",
+    "connecting": "Connecting...",
+    "creatingAccount": "Creating account...",
+    "unexpectedError": "An unexpected error occurred",
+    "joinUs": "Join us to track your favorite cryptocurrencies",
+    "mustLoginToAccess": "You must log in to access the application",
+    "alreadyAccount": "Already have an account? Sign in",
+    "noAccount": "No account? Create account",
+    "termsAccept": "By creating an account, you accept our terms of use.",
+    "disconnect": "Disconnect"
+  },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "crypto": "Crypto",
+    "profile": "Profile",
+    "settings": "Settings",
+    "favorites": "Favorites",
+    "myCrypto": "My Crypto"
+  },
+  "profile": {
+    "title": "User Profile",
+    "description": "Manage your personal information and preferences",
+    "editProfile": "Edit Profile",
+    "saveChanges": "Save Changes",
+    "personalInfo": "Personal Information",
+    "professionalInfo": "Professional Information",
+    "about": "About",
+    "accountInfo": "Account Information",
+    "accountActions": "Account Actions",
+    "accountStatus": "Account Status",
+    "memberSince": "Member since",
+    "activeVerified": "Active & Verified",
+    "cryptoTrader": "Crypto Trader",
+    "signingOut": "Signing Out...",
+    "fields": {
+      "username": "Username",
+      "email": "Email Address",
+      "phone": "Phone Number",
+      "location": "Location",
+      "company": "Company",
+      "website": "Website",
+      "bio": "Bio"
+    },
+    "placeholders": {
+      "username": "Enter username",
+      "email": "Enter email",
+      "phone": "Enter phone number",
+      "location": "Enter location",
+      "company": "Enter company name",
+      "website": "Enter website URL",
+      "bio": "Tell us about yourself..."
+    },
+    "notSpecified": "Not specified",
+    "noBio": "No bio available"
+  },
+  "settings": {
+    "title": "Settings",
+    "description": "Customize your crypto dashboard experience",
+    "saveSettings": "Save Settings",
+    "tabs": {
+      "general": "General",
+      "notifications": "Notifications",
+      "security": "Security",
+      "appearance": "Appearance",
+      "privacy": "Privacy",
+      "data": "Data"
+    },
+    "general": {
+      "title": "General Settings",
+      "accountInfo": "Account Information",
+      "regionalSettings": "Regional Settings",
+      "language": "Language",
+      "timezone": "Timezone",
+      "languagePreviewNote": "Changes preview instantly but won't be saved until you click Save Settings",
+      "languagePreviewActive": "Language preview is active - interface shows changes in real-time",
+      "languages": {
+        "en": "English",
+        "fr": "French",
+        "es": "Spanish",
+        "de": "German"
+      },
+      "timezones": {
+        "UTC": "UTC",
+        "EST": "Eastern Time",
+        "PST": "Pacific Time",
+        "CET": "Central European Time"
+      }
+    },
+    "notifications": {
+      "title": "Notification Settings",
+      "priceAlerts": "Price Alerts",
+      "priceAlertsDesc": "Receive notifications when cryptocurrency prices change significantly",
+      "pushNotifications": "Push Notifications",
+      "pushNotificationsDesc": "Browser notifications for important updates",
+      "emailNotifications": "Email Notifications",
+      "emailNotificationsDesc": "Receive weekly portfolio summaries via email",
+      "soundEffects": "Sound Effects",
+      "soundEffectsDesc": "Play sounds for notifications and interactions"
+    },
+    "security": {
+      "title": "Security Settings",
+      "passwordManagement": "Password Management",
+      "currentPassword": "Current Password",
+      "newPassword": "New Password",
+      "confirmNewPassword": "Confirm New Password",
+      "updatePassword": "Update Password",
+      "additionalSecurity": "Additional Security",
+      "twoFactorAuth": "Two-Factor Authentication",
+      "twoFactorAuthDesc": "Add an extra layer of security to your account"
+    },
+    "appearance": {
+      "title": "Appearance Settings",
+      "themeSelection": "Theme Selection",
+      "darkMode": "Dark Mode",
+      "lightMode": "Light Mode (Coming Soon)",
+      "displayOptions": "Display Options",
+      "compactMode": "Compact Mode",
+      "compactModeDesc": "Reduce spacing and padding for more content on screen",
+      "animations": "Animations",
+      "animationsDesc": "Enable smooth transitions and animations"
+    },
+    "privacy": {
+      "title": "Privacy Settings",
+      "dataUsage": "Data Usage",
+      "analytics": "Analytics & Performance",
+      "analyticsDesc": "Help improve the platform by sharing anonymous usage data",
+      "dataSharing": "Data Sharing",
+      "dataSharingDesc": "Share anonymized trading patterns for market research",
+      "profileVisibility": "Profile Visibility",
+      "public": "Public",
+      "friends": "Friends",
+      "private": "Private"
+    },
+    "data": {
+      "title": "Data & Storage",
+      "dataManagement": "Data Management",
+      "exportData": "Export Data",
+      "exportDataDesc": "Download your portfolio data and trading history",
+      "downloadData": "Download Data",
+      "clearData": "Clear Local Data",
+      "clearDataDesc": "This will remove all locally stored data including preferences and cache.",
+      "clearDataWarning": "This action cannot be undone.",
+      "clearAllData": "Clear All Data"
+    }
+  },
+  "crypto": {
+    "toolbar": {
+      "sort": "Sort",
+      "filter": "Filter",
+      "search": "Search",
+      "currency": "Currency",
+      "cache": "Cache",
+      "sortOptions": {
+        "market_cap": "Market Cap",
+        "current_price": "Price",
+        "name": "Name",
+        "market_cap_rank": "Ranking"
+      },
+      "filterOptions": {
+        "all": "All",
+        "favorites": "Favorites"
+      },
+      "searchPlaceholder": "Name or symbol...",
+      "searchPlaceholderMobile": "Search Bitcoin, ETH...",
+      "timePeriods": {
+        "1h": "1 Hour",
+        "24h": "24 Hours",
+        "1j": "1 Day",
+        "7j": "7 Days",
+        "30j": "30 Days"
+      },
+      "variation24h": "24h Variation"
+    },
+    "card": {
+      "marketCap": "Market cap",
+      "volume24h": "Volume 24h",
+      "dataUnavailable": "Data temporarily unavailable",
+      "dataUnavailableDesc": "Information momentarily unavailable.\nPlease reload the page or come back later.",
+      "partialMarketData": "Partial market data",
+      "add": "Add",
+      "remove": "Remove",
+      "info": "Info"
+    },
+    "status": {
+      "loading": "Loading...",
+      "retry": "Retry {count}",
+      "degradedMode": "Degraded mode",
+      "connected": "Connected"
+    }
+  },
+  "messages": {
+    "profileUpdated": "Profile updated successfully",
+    "settingsUpdated": "Settings updated successfully",
+    "profileUpdateError": "Failed to update profile",
+    "settingsUpdateError": "Failed to update settings",
+    "networkError": "Network error. Please try again.",
+    "unauthorizedError": "Unauthorized. Please log in again."
+  }
+}

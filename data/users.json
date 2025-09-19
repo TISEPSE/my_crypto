@@ -1,0 +1,110 @@
+[
+  {
+    "id": "1758178985489",
+    "email": "titi21player@gmail.com",
+    "username": "TISEPSE",
+    "password": "$2b$12$8OhLq/7hTklqrUK.obBH5.SgL/RYXEPdGfu8pe9IU9v/8koNODX2u",
+    "phone": "",
+    "location": "",
+    "bio": "",
+    "company": "",
+    "website": "",
+    "language": "fr",
+    "timezone": "UTC",
+    "theme": "dark",
+    "notifications": {
+      "priceAlerts": true,
+      "pushNotifications": false,
+      "emailNotifications": true,
+      "soundEnabled": true
+    },
+    "privacy": {
+      "analytics": true,
+      "dataSharing": false,
+      "profileVisibility": "private"
+    },
+    "createdAt": "2025-09-18T07:03:05.489Z",
+    "updatedAt": "2025-09-19T11:42:29.838Z"
+  },
+  {
+    "id": "1758214139973-fyn4t7l89",
+    "email": "baptiste.deme35@gmail.com",
+    "username": "TISEPSE",
+    "password": "$2b$12$keWjBeLBnZiurf0acBm3E.k5RTJ85BBfl7gDAIToY2d0FTf3oWdT2",
+    "phone": "",
+    "location": "",
+    "bio": "",
+    "company": "",
+    "website": "",
+    "language": "fr",
+    "timezone": "UTC",
+    "theme": "dark",
+    "notifications": {
+      "priceAlerts": true,
+      "pushNotifications": false,
+      "emailNotifications": true,
+      "soundEnabled": true
+    },
+    "privacy": {
+      "analytics": true,
+      "dataSharing": false,
+      "profileVisibility": "private"
+    },
+    "createdAt": "2025-09-18T16:48:59.973Z",
+    "updatedAt": "2025-09-18T16:48:59.973Z"
+  },
+  {
+    "id": "1758264713428-hajlt2ssf",
+    "email": "test@performance.com",
+    "username": "TestUser",
+    "password": "$2b$10$CP.Xg5zfMYxhNaDwX.luB.6vQStCOwyhkcrPOqt3Oc1Upgv0lHoOK",
+    "phone": "",
+    "location": "",
+    "bio": "",
+    "company": "",
+    "website": "",
+    "language": "fr",
+    "timezone": "UTC",
+    "theme": "dark",
+    "notifications": {
+      "priceAlerts": true,
+      "pushNotifications": false,
+      "emailNotifications": true,
+      "soundEnabled": true
+    },
+    "privacy": {
+      "analytics": true,
+      "dataSharing": false,
+      "profileVisibility": "private"
+    },
+    "createdAt": "2025-09-19T06:51:53.429Z",
+    "updatedAt": "2025-09-19T06:51:53.429Z"
+  },
+  {
+    "id": "1758267900726-tb7y2dm8k",
+    "email": "testloop@example.com",
+    "username": "TestLoop",
+    "password": "$2b$10$cUqoV.TVNS/TiWJpik1G4uHMwcaDeIFxrLhdkn2PZ2G0FWvh46.mC",
+    "phone": "",
+    "location": "",
+    "bio": "",
+    "company": "",
+    "website": "",
+    "language": "fr",
+    "timezone": "UTC",
+    "theme": "dark",
+    "notifications": {
+      "priceAlerts": true,
+      "pushNotifications": false,
+      "emailNotifications": true,
+      "soundEnabled": true
+    },
+    "privacy": {
+      "analytics": true,
+      "dataSharing": false,
+      "profileVisibility": "private"
+    },
+    "createdAt": "2025-09-19T07:45:00.726Z",
+    "updatedAt": "2025-09-19T07:45:00.726Z"
+  }
+]

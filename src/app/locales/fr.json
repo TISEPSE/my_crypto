@@ -1,0 +1,244 @@
+{
+  "common": {
+    "save": "Sauvegarder",
+    "cancel": "Annuler",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès",
+    "confirm": "Confirmer",
+    "back": "Retour",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "close": "Fermer",
+    "add": "Ajouter",
+    "remove": "Retirer",
+    "unavailable": "Indisponible",
+    "user": "Utilisateur",
+    "connected": "Connecté",
+    "clear": "Effacer",
+    "retry": "Réessayer",
+    "degradedMode": "Mode dégradé"
+  },
+  "auth": {
+    "login": "Connexion",
+    "register": "Inscription",
+    "logout": "Déconnexion",
+    "email": "Adresse e-mail",
+    "password": "Mot de passe",
+    "username": "Nom d'utilisateur",
+    "confirmPassword": "Confirmer le mot de passe",
+    "forgotPassword": "Mot de passe oublié ?",
+    "dontHaveAccount": "Vous n'avez pas de compte ?",
+    "alreadyHaveAccount": "Vous avez déjà un compte ?",
+    "signInSuccess": "Connexion réussie",
+    "signUpSuccess": "Compte créé avec succès. Vous pouvez maintenant vous connecter.",
+    "signOutSuccess": "Déconnexion réussie",
+    "loginRequired": "Connexion requise",
+    "createAccount": "Créer un compte",
+    "signIn": "Se connecter",
+    "emailPlaceholder": "Adresse email",
+    "passwordPlaceholder": "Mot de passe",
+    "usernamePlaceholder": "Nom d'utilisateur (optionnel - généré automatiquement si vide)",
+    "usernameOptional": "Nom d'utilisateur (optionnel - généré automatiquement si vide)",
+    "connecting": "Connexion...",
+    "creatingAccount": "Création...",
+    "unexpectedError": "Une erreur inattendue s'est produite",
+    "joinUs": "Rejoignez-nous pour suivre vos cryptomonnaies favorites",
+    "mustLoginToAccess": "Vous devez vous connecter pour accéder à l'application",
+    "alreadyAccount": "Déjà un compte ? Se connecter",
+    "noAccount": "Pas de compte ? Créer un compte",
+    "termsAccept": "En créant un compte, vous acceptez nos conditions d'utilisation.",
+    "disconnect": "Se déconnecter",
+    "welcome": "Bienvenue",
+    "logoutDescription": "Fermer votre session actuelle"
+  },
+  "navigation": {
+    "dashboard": "Tableau de bord",
+    "crypto": "Crypto",
+    "profile": "Profil",
+    "settings": "Paramètres",
+    "favorites": "Favoris",
+    "myCrypto": "My Crypto"
+  },
+  "profile": {
+    "title": "Profil Utilisateur",
+    "description": "Gérez vos informations personnelles et préférences",
+    "editProfile": "Modifier le Profil",
+    "saveChanges": "Sauvegarder les modifications",
+    "personalInfo": "Informations Personnelles",
+    "professionalInfo": "Informations Professionnelles",
+    "about": "À propos",
+    "accountInfo": "Informations du Compte",
+    "accountActions": "Actions du Compte",
+    "accountStatus": "Statut du Compte",
+    "memberSince": "Membre depuis",
+    "activeVerified": "Actif et Vérifié",
+    "cryptoTrader": "Trader Crypto",
+    "signingOut": "Déconnexion...",
+    "fields": {
+      "username": "Nom d'utilisateur",
+      "email": "Adresse e-mail",
+      "phone": "Numéro de téléphone",
+      "location": "Localisation",
+      "company": "Entreprise",
+      "website": "Site web",
+      "bio": "Biographie"
+    },
+    "placeholders": {
+      "username": "Entrez le nom d'utilisateur",
+      "email": "Entrez l'e-mail",
+      "phone": "Entrez le numéro de téléphone",
+      "location": "Entrez la localisation",
+      "company": "Entrez le nom de l'entreprise",
+      "website": "Entrez l'URL du site web",
+      "bio": "Parlez-nous de vous..."
+    },
+    "notSpecified": "Non spécifié",
+    "noBio": "Aucune biographie disponible"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "description": "Personnalisez votre expérience crypto dashboard",
+    "saveSettings": "Sauvegarder les Paramètres",
+    "tabs": {
+      "general": "Général",
+      "notifications": "Notifications",
+      "security": "Sécurité",
+      "appearance": "Apparence",
+      "privacy": "Confidentialité",
+      "data": "Données"
+    },
+    "general": {
+      "title": "Paramètres Généraux",
+      "accountInfo": "Informations du Compte",
+      "regionalSettings": "Paramètres Régionaux",
+      "language": "Langue",
+      "timezone": "Fuseau horaire",
+      "languagePreviewNote": "Les changements s'affichent immédiatement mais ne seront sauvegardés qu'en cliquant sur Sauvegarder",
+      "languagePreviewActive": "L'aperçu de langue est actif - l'interface affiche les changements en temps réel",
+      "languages": {
+        "en": "Anglais",
+        "fr": "Français",
+        "es": "Espagnol",
+        "de": "Allemand"
+      },
+      "timezones": {
+        "UTC": "UTC",
+        "EST": "Heure de l'Est",
+        "PST": "Heure du Pacifique",
+        "CET": "Heure d'Europe Centrale"
+      }
+    },
+    "notifications": {
+      "title": "Paramètres de Notifications",
+      "priceAlerts": "Alertes de Prix",
+      "priceAlertsDesc": "Recevoir des notifications lorsque les prix des cryptomonnaies changent significativement",
+      "pushNotifications": "Notifications Push",
+      "pushNotificationsDesc": "Notifications du navigateur pour les mises à jour importantes",
+      "emailNotifications": "Notifications par E-mail",
+      "emailNotificationsDesc": "Recevoir des résumés hebdomadaires de portefeuille par e-mail",
+      "soundEffects": "Effets Sonores",
+      "soundEffectsDesc": "Jouer des sons pour les notifications et interactions"
+    },
+    "security": {
+      "title": "Paramètres de Sécurité",
+      "passwordManagement": "Gestion du Mot de Passe",
+      "currentPassword": "Mot de passe actuel",
+      "newPassword": "Nouveau mot de passe",
+      "confirmNewPassword": "Confirmer le nouveau mot de passe",
+      "updatePassword": "Mettre à jour le mot de passe",
+      "additionalSecurity": "Sécurité Supplémentaire",
+      "twoFactorAuth": "Authentification à Deux Facteurs",
+      "twoFactorAuthDesc": "Ajouter une couche de sécurité supplémentaire à votre compte"
+    },
+    "appearance": {
+      "title": "Paramètres d'Apparence",
+      "themeSelection": "Sélection du Thème",
+      "darkMode": "Mode Sombre",
+      "lightMode": "Mode Clair (Bientôt Disponible)",
+      "displayOptions": "Options d'Affichage",
+      "compactMode": "Mode Compact",
+      "compactModeDesc": "Réduire l'espacement et le remplissage pour plus de contenu à l'écran",
+      "animations": "Animations",
+      "animationsDesc": "Activer les transitions fluides et animations"
+    },
+    "privacy": {
+      "title": "Paramètres de Confidentialité",
+      "dataUsage": "Utilisation des Données",
+      "analytics": "Analyses et Performance",
+      "analyticsDesc": "Aider à améliorer la plateforme en partageant des données d'utilisation anonymes",
+      "dataSharing": "Partage de Données",
+      "dataSharingDesc": "Partager des modèles de trading anonymisés pour la recherche de marché",
+      "profileVisibility": "Visibilité du Profil",
+      "public": "Public",
+      "friends": "Amis",
+      "private": "Privé"
+    },
+    "data": {
+      "title": "Données et Stockage",
+      "dataManagement": "Gestion des Données",
+      "exportData": "Exporter les Données",
+      "exportDataDesc": "Télécharger vos données de portefeuille et historique de trading",
+      "downloadData": "Télécharger les Données",
+      "clearData": "Effacer les Données Locales",
+      "clearDataDesc": "Cela supprimera toutes les données stockées localement, y compris les préférences et le cache.",
+      "clearDataWarning": "Cette action ne peut pas être annulée.",
+      "clearAllData": "Effacer Toutes les Données"
+    }
+  },
+  "crypto": {
+    "toolbar": {
+      "sort": "Tri",
+      "filter": "Filtre",
+      "search": "Recherche",
+      "currency": "Devise",
+      "cache": "Cache",
+      "sortOptions": {
+        "market_cap": "Capitalisation",
+        "current_price": "Prix",
+        "name": "Nom",
+        "market_cap_rank": "Classement"
+      },
+      "filterOptions": {
+        "all": "Tous",
+        "favorites": "Favoris"
+      },
+      "searchPlaceholder": "Nom ou symbole...",
+      "searchPlaceholderMobile": "Rechercher Bitcoin, ETH...",
+      "timePeriods": {
+        "1h": "1 Heure",
+        "24h": "24 Heures",
+        "1j": "1 Jour",
+        "7j": "7 Jours",
+        "30j": "30 Jours"
+      },
+      "variation24h": "Variation 24h"
+    },
+    "card": {
+      "marketCap": "Cap. marché",
+      "volume24h": "Volume 24h",
+      "dataUnavailable": "Données temporairement indisponibles",
+      "dataUnavailableDesc": "Informations momentanément indisponibles.\nVeuillez recharger la page ou revenir plus tard.",
+      "partialMarketData": "Données de marché partielles",
+      "add": "Ajouter",
+      "remove": "Retirer",
+      "info": "Info"
+    },
+    "status": {
+      "loading": "Chargement...",
+      "retry": "Retry {count}",
+      "degradedMode": "Mode dégradé",
+      "connected": "Connecté"
+    }
+  },
+  "messages": {
+    "profileUpdated": "Profil mis à jour avec succès",
+    "settingsUpdated": "Paramètres mis à jour avec succès",
+    "profileUpdateError": "Échec de la mise à jour du profil",
+    "settingsUpdateError": "Échec de la mise à jour des paramètres",
+    "networkError": "Erreur réseau. Veuillez réessayer.",
+    "unauthorizedError": "Non autorisé. Veuillez vous reconnecter."
+  }
+}

@@ -1,0 +1,427 @@
+import { Pool } from 'pg'
+import bcrypt from 'bcryptjs'
+
+// PostgreSQL connection pool
+let pool = null
+
+function getPool() {
+  if (!pool) {
+    pool = new Pool({
+      connectionString: process.env.DATABASE_URL,
+      ssl: process.env.NODE_ENV === 'production'
+        ? { rejectUnauthorized: false }
+        : false,
+      max: 20, // Maximum number of clients in the pool
+      idleTimeoutMillis: 30000, // How long a client is allowed to remain idle
+      connectionTimeoutMillis: 2000, // How long to wait for a connection
+    })
+
+    // Handle pool errors
+    pool.on('error', (err) => {
+      console.error('Unexpected error on idle client:', err)
+    })
+  }
+  return pool
+}
+
+// Database initialization - creates tables if they don't exist
+export async function initializeDatabase() {
+  const client = getPool()
+
+  try {
+    // Create users table
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS users (
+        id SERIAL PRIMARY KEY,
+        unique_id VARCHAR(100) UNIQUE NOT NULL,
+        email VARCHAR(255) UNIQUE NOT NULL,
+        username VARCHAR(100) NOT NULL,
+        password VARCHAR(255) NOT NULL,
+        phone VARCHAR(50) DEFAULT '',
+        location VARCHAR(255) DEFAULT '',
+        bio TEXT DEFAULT '',
+        company VARCHAR(255) DEFAULT '',
+        website VARCHAR(255) DEFAULT '',
+        language VARCHAR(10) DEFAULT 'fr',
+        timezone VARCHAR(50) DEFAULT 'UTC',
+        theme VARCHAR(20) DEFAULT 'dark',
+        notifications JSONB DEFAULT '{"priceAlerts": true, "pushNotifications": false, "emailNotifications": true, "soundEnabled": true}',
+        privacy JSONB DEFAULT '{"analytics": true, "dataSharing": false, "profileVisibility": "private"}',
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      )
+    `)
+
+    // Create favorites table
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS favorites (
+        id SERIAL PRIMARY KEY,
+        user_id VARCHAR(100) NOT NULL,
+        crypto_id VARCHAR(50) NOT NULL,
+        symbol VARCHAR(20) NOT NULL,
+        name VARCHAR(255) NOT NULL,
+        added_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE(user_id, symbol),
+        FOREIGN KEY (user_id) REFERENCES users(unique_id) ON DELETE CASCADE
+      )
+    `)
+
+    // Create indexes for better performance
+    await client.query(`
+      CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
+      CREATE INDEX IF NOT EXISTS idx_users_unique_id ON users(unique_id);
+      CREATE INDEX IF NOT EXISTS idx_favorites_user_id ON favorites(user_id);
+      CREATE INDEX IF NOT EXISTS idx_favorites_symbol ON favorites(symbol);
+    `)
+
+    // Create trigger to automatically update updated_at column
+    await client.query(`
+      CREATE OR REPLACE FUNCTION update_updated_at_column()
+      RETURNS TRIGGER AS $$
+      BEGIN
+        NEW.updated_at = CURRENT_TIMESTAMP;
+        RETURN NEW;
+      END;
+      $$ language 'plpgsql';
+    `)
+
+    await client.query(`
+      DROP TRIGGER IF EXISTS update_users_updated_at ON users;
+      CREATE TRIGGER update_users_updated_at
+        BEFORE UPDATE ON users
+        FOR EACH ROW
+        EXECUTE PROCEDURE update_updated_at_column();
+    `)
+
+    console.log('✅ PostgreSQL database initialized successfully')
+    return true
+  } catch (error) {
+    console.error('❌ Failed to initialize PostgreSQL database:', error)
+    throw error
+  }
+}
+
+// User management
+export async function createUser(email, password, username) {
+  const client = getPool()
+
+  try {
+    // Check if user already exists
+    const existingUser = await client.query(
+      'SELECT id FROM users WHERE email = $1',
+      [email.toLowerCase()]
+    )
+
+    if (existingUser.rows.length > 0) {
+      throw new Error('Un utilisateur avec cet email existe déjà')
+    }
+
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 12)
+
+    // Generate unique ID and username if not provided
+    const uniqueId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+    const finalUsername = username && username.trim()
+      ? username.trim()
+      : `user${Math.floor(Math.random() * 10000)}`
+
+    // Insert new user
+    const result = await client.query(`
+      INSERT INTO users (
+        unique_id, email, username, password, phone, location, bio, company, website,
+        language, timezone, theme, notifications, privacy
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+      RETURNING unique_id, email, username, phone, location, bio, company, website,
+               language, timezone, theme, notifications, privacy, created_at, updated_at
+    `, [
+      uniqueId,
+      email.toLowerCase().trim(),
+      finalUsername,
+      hashedPassword,
+      '',
+      '',
+      '',
+      '',
+      '',
+      'fr',
+      'UTC',
+      'dark',
+      JSON.stringify({
+        priceAlerts: true,
+        pushNotifications: false,
+        emailNotifications: true,
+        soundEnabled: true
+      }),
+      JSON.stringify({
+        analytics: true,
+        dataSharing: false,
+        profileVisibility: 'private'
+      })
+    ])
+
+    const newUser = result.rows[0]
+    return {
+      id: newUser.unique_id,
+      email: newUser.email,
+      username: newUser.username,
+      phone: newUser.phone,
+      location: newUser.location,
+      bio: newUser.bio,
+      company: newUser.company,
+      website: newUser.website,
+      language: newUser.language,
+      timezone: newUser.timezone,
+      theme: newUser.theme,
+      notifications: newUser.notifications,
+      privacy: newUser.privacy,
+      createdAt: newUser.created_at,
+      updatedAt: newUser.updated_at
+    }
+  } catch (error) {
+    console.error('Error creating user:', error)
+    throw error
+  }
+}
+
+export async function authenticateUser(email, password) {
+  const client = getPool()
+
+  try {
+    const result = await client.query(
+      'SELECT * FROM users WHERE email = $1',
+      [email.toLowerCase()]
+    )
+
+    if (result.rows.length === 0) {
+      throw new Error('Email ou mot de passe incorrect')
+    }
+
+    const user = result.rows[0]
+    const isValidPassword = await bcrypt.compare(password, user.password)
+
+    if (!isValidPassword) {
+      throw new Error('Email ou mot de passe incorrect')
+    }
+
+    // Return user without password
+    return {
+      id: user.unique_id,
+      email: user.email,
+      username: user.username,
+      phone: user.phone,
+      location: user.location,
+      bio: user.bio,
+      company: user.company,
+      website: user.website,
+      language: user.language,
+      timezone: user.timezone,
+      theme: user.theme,
+      notifications: user.notifications,
+      privacy: user.privacy,
+      createdAt: user.created_at,
+      updatedAt: user.updated_at
+    }
+  } catch (error) {
+    console.error('Error authenticating user:', error)
+    throw error
+  }
+}
+
+export async function getUserById(id) {
+  const client = getPool()
+
+  try {
+    const result = await client.query(
+      'SELECT * FROM users WHERE unique_id = $1',
+      [id]
+    )
+
+    if (result.rows.length === 0) {
+      return null
+    }
+
+    const user = result.rows[0]
+    return {
+      id: user.unique_id,
+      email: user.email,
+      username: user.username,
+      phone: user.phone,
+      location: user.location,
+      bio: user.bio,
+      company: user.company,
+      website: user.website,
+      language: user.language,
+      timezone: user.timezone,
+      theme: user.theme,
+      notifications: user.notifications,
+      privacy: user.privacy,
+      createdAt: user.created_at,
+      updatedAt: user.updated_at
+    }
+  } catch (error) {
+    console.error('Error getting user by ID:', error)
+    return null
+  }
+}
+
+export async function updateUser(userId, updates) {
+  const client = getPool()
+
+  try {
+    // Exclude sensitive fields
+    const { password, id, createdAt, ...allowedUpdates } = updates
+
+    // Build dynamic query
+    const fields = Object.keys(allowedUpdates)
+    if (fields.length === 0) {
+      throw new Error('No valid fields to update')
+    }
+
+    const setClause = fields.map((field, index) => {
+      const dbField = field === 'id' ? 'unique_id' : field.replace(/([A-Z])/g, '_$1').toLowerCase()
+      return `${dbField} = $${index + 2}`
+    }).join(', ')
+
+    const values = [userId, ...Object.values(allowedUpdates)]
+
+    const result = await client.query(`
+      UPDATE users
+      SET ${setClause}
+      WHERE unique_id = $1
+      RETURNING unique_id, email, username, phone, location, bio, company, website,
+               language, timezone, theme, notifications, privacy, created_at, updated_at
+    `, values)
+
+    if (result.rows.length === 0) {
+      throw new Error('Utilisateur non trouvé')
+    }
+
+    const user = result.rows[0]
+    return {
+      id: user.unique_id,
+      email: user.email,
+      username: user.username,
+      phone: user.phone,
+      location: user.location,
+      bio: user.bio,
+      company: user.company,
+      website: user.website,
+      language: user.language,
+      timezone: user.timezone,
+      theme: user.theme,
+      notifications: user.notifications,
+      privacy: user.privacy,
+      createdAt: user.created_at,
+      updatedAt: user.updated_at
+    }
+  } catch (error) {
+    console.error('Error updating user:', error)
+    throw error
+  }
+}
+
+// Favorites management
+export async function getUserFavorites(userId) {
+  const client = getPool()
+
+  try {
+    const result = await client.query(
+      'SELECT crypto_id as id, symbol, name, added_at as "addedAt" FROM favorites WHERE user_id = $1 ORDER BY added_at DESC',
+      [userId]
+    )
+
+    return result.rows.map(row => ({
+      id: row.id,
+      symbol: row.symbol,
+      name: row.name,
+      addedAt: row.addedAt
+    }))
+  } catch (error) {
+    console.error('Error getting user favorites:', error)
+    return []
+  }
+}
+
+export async function addUserFavorite(userId, crypto) {
+  const client = getPool()
+
+  try {
+    const normalizedSymbol = crypto.symbol.toLowerCase()
+
+    // Check if already exists
+    const existing = await client.query(
+      'SELECT id FROM favorites WHERE user_id = $1 AND symbol = $2',
+      [userId, normalizedSymbol]
+    )
+
+    if (existing.rows.length > 0) {
+      throw new Error('Ce crypto est déjà dans vos favoris')
+    }
+
+    const cryptoId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+
+    const result = await client.query(`
+      INSERT INTO favorites (user_id, crypto_id, symbol, name)
+      VALUES ($1, $2, $3, $4)
+      RETURNING crypto_id as id, symbol, name, added_at as "addedAt"
+    `, [userId, cryptoId, normalizedSymbol, crypto.name])
+
+    return {
+      id: result.rows[0].id,
+      symbol: result.rows[0].symbol,
+      name: result.rows[0].name,
+      addedAt: result.rows[0].addedAt
+    }
+  } catch (error) {
+    console.error('Error adding favorite:', error)
+    throw error
+  }
+}
+
+export async function removeUserFavorite(userId, symbol) {
+  const client = getPool()
+
+  try {
+    const normalizedSymbol = symbol.toLowerCase()
+
+    const result = await client.query(
+      'DELETE FROM favorites WHERE user_id = $1 AND symbol = $2 RETURNING *',
+      [userId, normalizedSymbol]
+    )
+
+    return result.rows.length > 0 ? result.rows[0] : false
+  } catch (error) {
+    console.error('Error removing favorite:', error)
+    return false
+  }
+}
+
+// Health check function
+export async function checkDatabaseHealth() {
+  const client = getPool()
+
+  try {
+    const result = await client.query('SELECT NOW() as current_time')
+    return {
+      status: 'healthy',
+      timestamp: result.rows[0].current_time,
+      type: 'PostgreSQL'
+    }
+  } catch (error) {
+    console.error('Database health check failed:', error)
+    return {
+      status: 'unhealthy',
+      error: error.message,
+      type: 'PostgreSQL'
+    }
+  }
+}
+
+// Graceful shutdown
+export async function closeDatabaseConnection() {
+  if (pool) {
+    await pool.end()
+    pool = null
+    console.log('PostgreSQL connection pool closed')
+  }
+}
