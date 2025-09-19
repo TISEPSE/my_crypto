@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { jwtVerify } from 'jose'
-import { changeUserPassword } from '../../../lib/database-optimized'
+import { changeUserPassword } from '../../../lib/database'
 
 const secret = new TextEncoder().encode(
   process.env.JWT_SECRET || 'your-secret-key-change-this-in-production'

@@ -1,11 +1,10 @@
 import { NextResponse } from 'next/server'
 import { jwtVerify } from 'jose'
 import {
-  updateUserPartial,
-  updateUserSettings,
+  updateUser,
   getUserById,
-  getDatabaseStats
-} from '../../../lib/database-optimized'
+  getDatabaseInfo
+} from '../../../lib/database'
 
 const secret = new TextEncoder().encode(
   process.env.JWT_SECRET || 'your-secret-key-change-this-in-production'
@@ -161,11 +160,8 @@ export async function PATCH(request) {
         )
       }
 
-      if (updateType === 'settings') {
-        updatedUser = await updateUserSettings(user.id, validatedData)
-      } else {
-        updatedUser = await updateUserPartial(user.id, validatedData)
-      }
+      // All updates go through the general updateUser function in Prisma
+      updatedUser = await updateUser(user.id, validatedData)
 
       const processingTime = Date.now() - startTime
 
@@ -222,7 +218,7 @@ export async function GET(request) {
       user: userProfile,
       performance: {
         processingTime: `${processingTime}ms`,
-        cacheStats: getDatabaseStats()
+        databaseInfo: await getDatabaseInfo()
       }
     })
 
@@ -285,12 +281,8 @@ export async function POST(request) {
           continue
         }
 
-        let result
-        if (updateType === 'settings') {
-          result = await updateUserSettings(user.id, validatedData)
-        } else {
-          result = await updateUserPartial(user.id, validatedData)
-        }
+        // All updates go through the general updateUser function in Prisma
+        let result = await updateUser(user.id, validatedData)
 
         results.push({
           updateType,

@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                 String   @id @default(cuid())
+  email              String   @unique
+  username           String
+  password           String
+  phone              String?
+  location           String?
+  bio                String?
+  company            String?
+  website            String?
+  language           String   @default("fr")
+  timezone           String   @default("UTC")
+  theme              String   @default("dark")
+  priceAlerts        Boolean  @default(true)
+  pushNotifications  Boolean  @default(false)
+  emailNotifications Boolean  @default(true)
+  soundEnabled       Boolean  @default(true)
+  analytics          Boolean  @default(true)
+  dataSharing        Boolean  @default(false)
+  profileVisibility  String   @default("private")
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  // Relations
+  favorites          Favorite[]
+
+  @@map("users")
+}
+
+model Favorite {
+  id        String   @id @default(cuid())
+  symbol    String   // crypto symbol (btc, eth, etc.)
+  name      String   // crypto name (Bitcoin, Ethereum, etc.)
+  addedAt   DateTime @default(now())
+
+  // Foreign key relation
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Ensure one crypto per user (no duplicates)
+  @@unique([userId, symbol])
+  @@map("favorites")
+}

@@ -1,15 +1,6 @@
-const jwt = require('jsonwebtoken')
-const bcrypt = require('bcryptjs')
-
-// Pour les appels côté serveur NextJS
-let cookies
-try {
-  const nextHeaders = require('next/headers')
-  cookies = nextHeaders.cookies
-} catch (error) {
-  // Fallback pour les environnements qui n'ont pas next/headers
-  cookies = null
-}
+import jwt from 'jsonwebtoken'
+import bcrypt from 'bcryptjs'
+import { cookies } from 'next/headers'
 
 // Configuration JWT
 const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-key-change-in-production'
@@ -297,7 +288,7 @@ class SecurityUtils {
   }
 }
 
-module.exports = {
+export {
   PasswordUtils,
   JWTUtils,
   CookieUtils,

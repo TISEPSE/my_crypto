@@ -25,15 +25,29 @@ export async function GET(request) {
         user: {
           id: userDetails.id,
           email: userDetails.email,
-          name: userDetails.name,
-          createdAt: userDetails.created_at,
-          lastLogin: userDetails.last_login,
-          emailVerified: userDetails.email_verified
+          username: userDetails.username,
+          createdAt: userDetails.createdAt,
+          updatedAt: userDetails.updatedAt,
+          phone: userDetails.phone,
+          location: userDetails.location,
+          bio: userDetails.bio,
+          company: userDetails.company,
+          website: userDetails.website,
+          language: userDetails.language,
+          timezone: userDetails.timezone,
+          theme: userDetails.theme,
+          priceAlerts: userDetails.priceAlerts,
+          pushNotifications: userDetails.pushNotifications,
+          emailNotifications: userDetails.emailNotifications,
+          soundEnabled: userDetails.soundEnabled,
+          analytics: userDetails.analytics,
+          dataSharing: userDetails.dataSharing,
+          profileVisibility: userDetails.profileVisibility
         },
         favorites: favorites,
         stats: {
           favoritesCount: favorites.length,
-          memberSince: userDetails.created_at
+          memberSince: userDetails.createdAt
         }
       },
       { status: 200 }

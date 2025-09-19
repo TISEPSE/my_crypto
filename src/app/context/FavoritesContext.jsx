@@ -102,10 +102,13 @@ export const FavoritesProvider = ({ children }) => {
     }
 
     try {
+      const authToken = localStorage.getItem('auth-token')
       const response = await fetch('/api/favorites', {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
+          ...(authToken && { 'Authorization': `Bearer ${authToken}` })
         },
         body: JSON.stringify({
           symbol: symbol.toLowerCase(),
@@ -144,8 +147,14 @@ export const FavoritesProvider = ({ children }) => {
     }
 
     try {
+      const authToken = localStorage.getItem('auth-token')
       const response = await fetch(`/api/favorites?symbol=${encodeURIComponent(symbol.toLowerCase())}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(authToken && { 'Authorization': `Bearer ${authToken}` })
+        }
       })
 
       if (!response.ok) {
